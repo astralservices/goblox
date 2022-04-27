@@ -31,7 +31,7 @@ package authenticate
 import (
 	"log"
 
-	"github.com/ebkr/goblox/goblox/network"
+	"github.com/astralservices/goblox/goblox/network"
 )
 
 type Authenticate struct {

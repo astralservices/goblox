@@ -3,7 +3,7 @@
 package marketplace
 
 import (
-	"github.com/ebkr/goblox/goblox/network"
+	"github.com/astralservices/goblox/goblox/network"
 )
 
 type Marketplace struct {

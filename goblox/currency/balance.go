@@ -5,7 +5,7 @@ package currency
 import (
 	"log"
 
-	"github.com/ebkr/goblox/goblox/authenticate"
+	"github.com/astralservices/goblox/goblox/authenticate"
 )
 
 func (ref *Currency) GetBalance(auth authenticate.Authenticate) (map[string]interface{}, error) {

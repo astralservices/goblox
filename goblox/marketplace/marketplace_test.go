@@ -4,7 +4,7 @@ import (
 	"log"
 	"testing"
 
-	"github.com/ebkr/goblox/goblox/network"
+	"github.com/astralservices/goblox/goblox/network"
 )
 
 func Test_GetProductInfo(test *testing.T) {

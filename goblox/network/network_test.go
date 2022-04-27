@@ -11,8 +11,9 @@ func Test_main(test *testing.T) {
 	req.New()
 
 	req.SetContentType(APPJSON)
-	req.SetRequestType(GET)
-	log.Println(req.SendRequest("http://api.roblox.com/user/get-username-by-id?username=ebkrrbx", map[string]interface{}{
-		"userId": 0,
+	req.SetRequestType(POST)
+	log.Println(req.SendRequest("https://users.roblox.com/v1/usernames/users", map[string]interface{}{
+		"usernames":          []string{"AstralServices"},
+		"excludeBannedUsers": true,
 	}))
 }

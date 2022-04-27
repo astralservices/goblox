@@ -74,6 +74,8 @@ func (ref *NetworkRequest) SetHeaders(header map[string][]string) {
 }
 func (ref *NetworkRequest) SetContentType(content HTTPContentType) {
 	ref.contentType = content
+	ref.AddHeader("Accept", []string{string(content)})
+	ref.AddHeader("Content-Type", []string{string(content)})
 }
 
 func (ref *NetworkRequest) SetRequestType(request HTTPRequestType) {
@@ -93,15 +95,17 @@ func (ref *NetworkRequest) AddCookie(cookie *http.Cookie) {
 }
 
 func (ref *NetworkRequest) SendRequest(url string, data map[string]interface{}) (string, error) {
+	log.Println(data)
 	if data == nil {
 		data = map[string]interface{}{}
 	}
 	marshal, jsonErr := json.Marshal(data)
+	log.Println(string(marshal))
 	if jsonErr != nil {
 		return "", jsonErr
 	}
 	client := http.Client{}
-	req, reqError := http.NewRequest(requestTypeToString[ref.requestType], url, bytes.NewBuffer([]byte(marshal)))
+	req, reqError := http.NewRequest(requestTypeToString[ref.requestType], url, bytes.NewBuffer(marshal))
 	if reqError != nil {
 		return "", reqError
 	}
