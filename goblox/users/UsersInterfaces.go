@@ -2,14 +2,16 @@ package users
 
 import (
 	"github.com/astralservices/goblox/goblox/groups"
-	"github.com/astralservices/goblox/goblox/network"
 )
 
-type User struct {
-	network.NetworkRequest
+type UserPopulate struct {
+	groups bool
 }
 
-type UserGroups func() []groups.IGroup
+type UserParams struct {
+	id       int
+	populate *UserPopulate
+}
 
 type IUser struct {
 	Description            string `json:"description"`
@@ -19,6 +21,8 @@ type IUser struct {
 	ID                     int64  `json:"id"`
 	Name                   string `json:"name"`
 	DisplayName            string `json:"displayName"`
+
+	groups *[]groups.IGroup
 }
 
 type IUserByUsername struct {
