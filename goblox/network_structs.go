@@ -1,4 +1,4 @@
-package network
+package goblox
 
 // HTTPRequestType : Type of HTTP Request to send
 type HTTPRequestType int

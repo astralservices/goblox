@@ -1,4 +1,4 @@
-package client
+package goblox
 
 import (
 	"log"
@@ -9,7 +9,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -40,4 +40,36 @@ func Test_NewClientWithTokenLogin(t *testing.T) {
 	} else {
 		t.Logf("login() returned true")
 	}
+}
+
+func Test_FetchUser(t *testing.T) {
+	token := os.Getenv("TOKEN")
+	c := New(SetToken(token))
+
+	user, err := c.users.fetchByUsername("AstralServices")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(user)
+}
+
+func Test_GetUsernameHistory(t *testing.T) {
+	token := os.Getenv("TOKEN")
+	c := New(SetToken(token))
+
+	user, err := c.users.fetchByUsername("AstralServices")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	history, err := user.GetUsernameHistory()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	log.Println(history)
 }

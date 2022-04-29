@@ -1,6 +1,4 @@
-package groups
-
-import "github.com/astralservices/goblox/goblox/network"
+package goblox
 
 type IUserGroups struct {
 	Data []Datum `json:"data"`
@@ -13,7 +11,7 @@ type Datum struct {
 }
 
 type Group struct {
-	network.NetworkRequest
+	NetworkRequest
 }
 
 type IGroup struct {

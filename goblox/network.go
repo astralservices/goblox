@@ -1,7 +1,7 @@
 // Inherited struct and functionality provided from this file
 // All API structs will use this.
 
-package network
+package goblox
 
 import (
 	"bytes"

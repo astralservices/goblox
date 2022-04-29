@@ -1,19 +1,18 @@
-package client
+package goblox
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
-
-	"github.com/astralservices/goblox/goblox/network"
-	"github.com/astralservices/goblox/goblox/users"
 )
 
 type Client struct {
 	token string
-	http  network.NetworkRequest
+	http  NetworkRequest
 
 	user IAuthenticatedUser
 
-	users users.Users
+	users UsersHandler
 
 	login func() bool
 }
@@ -23,12 +22,13 @@ type Option func(*Client)
 func SetToken(token string) Option {
 	return func(c *Client) {
 		c.token = token
+		log.Println("token set")
 	}
 }
 
 func New(opts ...Option) *Client {
 	c := &Client{
-		http: network.NetworkRequest{},
+		http: NetworkRequest{},
 	}
 
 	c.http.New()
@@ -48,6 +48,10 @@ func New(opts ...Option) *Client {
 		return Login(c)
 	}
 
+	c.users = UsersHandler{}
+
+	c.users = *c.users.New(c)
+
 	return c
 }
 
@@ -65,4 +69,18 @@ func Login(client *Client) bool {
 	}
 
 	return authed
+}
+
+func GetCurrentUser(client *Client) (user *IAuthenticatedUser, err error) {
+	client.http.SetRequestType(GET)
+	read, err := client.http.SendRequest("https://users.roblox.com/v1/users/authenticated", map[string]interface{}{})
+
+	if err != nil {
+		return &IAuthenticatedUser{}, err
+	}
+
+	var r IAuthenticatedUser
+	err = json.Unmarshal([]byte(read), &r)
+
+	return &r, err
 }

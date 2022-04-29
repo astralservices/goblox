@@ -1,8 +1,4 @@
-package users
-
-import (
-	"github.com/astralservices/goblox/goblox/groups"
-)
+package goblox
 
 type UserPopulate struct {
 	groups bool
@@ -22,7 +18,7 @@ type IUser struct {
 	Name                   string `json:"name"`
 	DisplayName            string `json:"displayName"`
 
-	groups *[]groups.IGroup
+	groups *[]IGroup
 }
 
 type IUserByUsername struct {
@@ -34,4 +30,14 @@ type IUserByUsernameDatum struct {
 	ID                int64  `json:"id"`
 	Name              string `json:"name"`
 	DisplayName       string `json:"displayName"`
+}
+
+type IPagedResponse[T any] struct {
+	PreviousPageCursor string `json:"previousPageCursor"`
+	NextPageCursor     string `json:"nextPageCursor"`
+	Data               []T    `json:"data"`
+}
+
+type IUsernameHistory struct {
+	Name string `json:"name"`
 }
