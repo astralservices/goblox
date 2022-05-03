@@ -32,12 +32,6 @@ type IUserByUsernameDatum struct {
 	DisplayName       string `json:"displayName"`
 }
 
-type IPagedResponse[T any] struct {
-	PreviousPageCursor string `json:"previousPageCursor"`
-	NextPageCursor     string `json:"nextPageCursor"`
-	Data               []T    `json:"data"`
-}
-
 type IUsernameHistory struct {
 	Name string `json:"name"`
 }

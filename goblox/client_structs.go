@@ -5,3 +5,13 @@ type IAuthenticatedUser struct {
 	Name        string `json:"name"`
 	DisplayName string `json:"displayName"`
 }
+
+type IPagedResponse[T any] struct {
+	PreviousPageCursor string `json:"previousPageCursor"`
+	NextPageCursor     string `json:"nextPageCursor"`
+	Data               []T    `json:"data"`
+}
+
+type DatumedResponse[T any] struct {
+	Data []T `json:"data"`
+}

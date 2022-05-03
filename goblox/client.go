@@ -12,7 +12,8 @@ type Client struct {
 
 	user IAuthenticatedUser
 
-	users UsersHandler
+	users  UsersHandler
+	groups GroupsHandler
 
 	login func() bool
 }
@@ -51,6 +52,10 @@ func New(opts ...Option) *Client {
 	c.users = UsersHandler{}
 
 	c.users = *c.users.New(c)
+
+	c.groups = GroupsHandler{}
+
+	c.groups = *c.groups.New(c)
 
 	return c
 }
