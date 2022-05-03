@@ -1,4 +1,4 @@
-package network
+package goblox
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 )
 
 // Test_main :
-func Test_main(test *testing.T) {
+func Test_NetworkRequest(test *testing.T) {
 	req := NetworkRequest{}
 	req.New()
 
