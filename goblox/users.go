@@ -15,6 +15,9 @@ type Users struct {
 	client Client
 }
 
+// Creates a new user handler with the given client.
+//
+// A user handler is used to fetch users by ID and username.
 func (ref *UsersHandler) New(client *Client) *UsersHandler {
 	u := &UsersHandler{}
 
@@ -35,6 +38,7 @@ func (ref *UsersHandler) New(client *Client) *UsersHandler {
 	return u
 }
 
+// Gets a user by ID.
 func (ref *Users) GetUserById(userId int64) (*User, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -57,6 +61,7 @@ func (ref *Users) GetUserById(userId int64) (*User, error) {
 	return u, err
 }
 
+// Gets a user by username.
 func (ref *Users) GetUserByUsername(username string) (*User, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(POST)
@@ -81,6 +86,7 @@ func (ref *Users) GetUserByUsername(username string) (*User, error) {
 	return u, err
 }
 
+// Gets a user by ID and populates specified fields.
 func (ref *Users) GetUserAndPopulate(params UserParams) (User, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -110,6 +116,7 @@ func (ref *Users) GetUserAndPopulate(params UserParams) (User, error) {
 	return user, err
 }
 
+// Gets all the groups for a user by ID.
 func (ref *Users) GetGroupsForUser(userId int) ([]IGroup, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)

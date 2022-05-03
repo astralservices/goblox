@@ -5,7 +5,8 @@ import (
 	"strconv"
 )
 
-func (ref *Group) New(data *IGroup, http *NetworkRequest, client *Client) *Group {
+// Initialize a new group with prefetched data.
+func (ref *Group) New(data *IGroup, client *Client) *Group {
 	group := &Group{
 		IGroup: *data,
 		client: client,
@@ -14,6 +15,7 @@ func (ref *Group) New(data *IGroup, http *NetworkRequest, client *Client) *Group
 	return group
 }
 
+// Gets all the roles in the group.
 func (ref *Group) GetRoles() ([]IGroupRole, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -31,6 +33,7 @@ func (ref *Group) GetRoles() ([]IGroupRole, error) {
 	return ref.roles, err
 }
 
+// Gets all the members in the group.
 func (ref *Group) GetMembers() ([]IGroupMember, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -50,6 +53,7 @@ func (ref *Group) GetMembers() ([]IGroupMember, error) {
 	return ref.members, err
 }
 
+// Gets the Icon URL for the group.
 func (ref *Group) GetIconURL() (string, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -67,6 +71,9 @@ func (ref *Group) GetIconURL() (string, error) {
 	return ref.iconUrl, err
 }
 
+// Gets the Audit Log for the group.
+//
+// Pagination is coming soon.
 func (ref *Group) GetAuditLog() (IPagedResponse[IAuditLog], error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -82,6 +89,9 @@ func (ref *Group) GetAuditLog() (IPagedResponse[IAuditLog], error) {
 	return r, err
 }
 
+// Gets the group wall for the group.
+//
+// Pagination is coming soon.
 func (ref *Group) GetGroupWall() (IPagedResponse[IWallPost], error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)

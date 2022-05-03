@@ -14,6 +14,9 @@ type Groups struct {
 	client *Client
 }
 
+// Creates a new group handler with the given client.
+//
+// A group handler is used to fetch groups by ID.
 func (ref *GroupsHandler) New(client *Client) *GroupsHandler {
 	g := &GroupsHandler{}
 
@@ -27,6 +30,7 @@ func (ref *GroupsHandler) New(client *Client) *GroupsHandler {
 	return g
 }
 
+// Gets a group by ID.
 func (ref *Groups) GetGroupById(groupId int64) (*Group, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -43,7 +47,7 @@ func (ref *Groups) GetGroupById(groupId int64) (*Group, error) {
 		IGroup: r,
 	}
 
-	g := group.New(&r, &ref.client.http, ref.client)
+	g := group.New(&r, ref.client)
 
 	return g, err
 }

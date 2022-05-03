@@ -10,12 +10,20 @@ type User struct {
 	client *Client
 }
 
-func GetGroups(ref *Client) {
-	ref.http.SetContentType(APPJSON)
-	ref.http.SetRequestType(GET)
-	ref.http.SendRequest("https://users.roblox.com/v1/groups", map[string]interface{}{})
+// Creates a new user with prefetched data.
+func (ref *User) New(data *IUser, client Client) *User {
+	user := &User{
+		IUser: *data,
+
+		client: &client,
+	}
+
+	return user
 }
 
+// Gets the user's username history.
+//
+// Pagination is coming soon.
 func (ref *User) GetUsernameHistory() (IPagedResponse[IUsernameHistory], error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -31,6 +39,7 @@ func (ref *User) GetUsernameHistory() (IPagedResponse[IUsernameHistory], error) 
 	return r, err
 }
 
+// Get all the groups that the user is in.
 func (ref *User) GetGroups() (IUserGroups, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
@@ -43,14 +52,4 @@ func (ref *User) GetGroups() (IUserGroups, error) {
 	err = json.Unmarshal([]byte(data), &r)
 
 	return r, err
-}
-
-func (ref *User) New(data *IUser, client Client) *User {
-	user := &User{
-		IUser: *data,
-
-		client: &client,
-	}
-
-	return user
 }

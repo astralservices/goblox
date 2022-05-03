@@ -20,6 +20,9 @@ type Client struct {
 
 type Option func(*Client)
 
+// Sets the token for the client
+//
+// Include the full token, including the warning prefix.
 func SetToken(token string) Option {
 	return func(c *Client) {
 		c.token = token
@@ -27,6 +30,7 @@ func SetToken(token string) Option {
 	}
 }
 
+// Creates a new client with options
 func New(opts ...Option) *Client {
 	c := &Client{
 		http: NetworkRequest{},
