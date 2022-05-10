@@ -18,7 +18,7 @@ type Group struct {
 	roles   []IGroupRole
 	members []IGroupMember
 
-	client *Client
+	client Client
 }
 
 type IGroup struct {

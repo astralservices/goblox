@@ -19,15 +19,19 @@ func TestMain(m *testing.M) {
 
 func Test_NewClient(t *testing.T) {
 	c := New()
-	if c == nil {
-		t.Errorf("New() returned nil")
+
+	if c.token == "" {
+		t.Logf("token is empty")
+	} else {
+		t.Logf("token is not empty")
 	}
 }
 
 func Test_NewClientWithToken(t *testing.T) {
 	c := New(SetToken(os.Getenv("TOKEN")))
-	if c == nil {
-		t.Errorf("New() returned nil")
+
+	if c.token == "" {
+		t.Logf("Token is empty")
 	}
 }
 

@@ -18,19 +18,19 @@ type Users struct {
 // Creates a new user handler with the given client.
 //
 // A user handler is used to fetch users by ID and username.
-func (ref *UsersHandler) New(client *Client) *UsersHandler {
+func (ref *UsersHandler) New(client Client) *UsersHandler {
 	u := &UsersHandler{}
 
 	u.fetchById = func(id int64) (user *User, err error) {
 		ref := &Users{
-			client: *client,
+			client: client,
 		}
 		return ref.GetUserById(int64(id))
 	}
 
 	u.fetchByUsername = func(username string) (user *User, err error) {
 		ref := &Users{
-			client: *client,
+			client: client,
 		}
 		return ref.GetUserByUsername(username)
 	}

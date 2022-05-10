@@ -11,13 +11,13 @@ type GroupsHandler struct {
 }
 
 type Groups struct {
-	client *Client
+	client Client
 }
 
 // Creates a new group handler with the given client.
 //
 // A group handler is used to fetch groups by ID.
-func (ref *GroupsHandler) New(client *Client) *GroupsHandler {
+func (ref *GroupsHandler) New(client Client) *GroupsHandler {
 	g := &GroupsHandler{}
 
 	g.fetchById = func(id int64) (user *Group, err error) {
