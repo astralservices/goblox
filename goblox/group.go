@@ -6,7 +6,7 @@ import (
 )
 
 // Initialize a new group with prefetched data.
-func (ref *Group) New(data *IGroup, client Client) *Group {
+func (ref *Group) New(data *IGroup, client *Client) *Group {
 	group := &Group{
 		IGroup: *data,
 		client: client,

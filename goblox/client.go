@@ -6,15 +6,16 @@ import (
 )
 
 type Client struct {
-	token string
-	http  NetworkRequest
+	Token string
 
-	user IAuthenticatedUser
+	User IAuthenticatedUser
 
-	users  UsersHandler
-	groups GroupsHandler
+	Users  *UsersHandler
+	Groups *GroupsHandler
 
-	login func() bool
+	Login func() bool
+
+	http NetworkRequest
 }
 
 type Option func(Client)
@@ -24,12 +25,12 @@ type Option func(Client)
 // Include the full token, including the warning prefix.
 func SetToken(token string) Option {
 	return func(c Client) {
-		c.token = token
+		c.Token = token
 	}
 }
 
 // Creates a new client with options
-func New(opts ...Option) Client {
+func New(opts ...Option) *Client {
 	c := Client{
 		http: NetworkRequest{},
 	}
@@ -40,26 +41,22 @@ func New(opts ...Option) Client {
 		opt(c)
 	}
 
-	if c.token != "" {
+	if c.Token != "" {
 		c.http.AddCookie(&http.Cookie{
 			Name:  ".ROBLOSECURITY",
-			Value: c.token,
+			Value: c.Token,
 		})
 	}
 
-	c.login = func() bool {
+	c.Login = func() bool {
 		return Login(c)
 	}
 
-	c.users = UsersHandler{}
+	c.Users = NewUsersHandler(c)
 
-	c.users = *c.users.New(c)
+	c.Groups = NewGroupsHandler(c)
 
-	c.groups = GroupsHandler{}
-
-	c.groups = *c.groups.New(c)
-
-	return c
+	return &c
 }
 
 func Login(client Client) bool {
@@ -72,7 +69,7 @@ func Login(client Client) bool {
 	authed := user.ID != 0
 
 	if authed {
-		client.user = *user
+		client.User = *user
 	}
 
 	return authed

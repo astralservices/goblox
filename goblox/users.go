@@ -2,47 +2,26 @@ package goblox
 
 import (
 	"encoding/json"
-	"log"
 	"strconv"
 )
 
 type UsersHandler struct {
-	fetchById       func(id int64) (user *User, err error)
-	fetchByUsername func(username string) (user *User, err error)
-}
-
-type Users struct {
-	client Client
+	client *Client
 }
 
 // Creates a new user handler with the given client.
 //
 // A user handler is used to fetch users by ID and username.
-func (ref *UsersHandler) New(client Client) *UsersHandler {
-	u := &UsersHandler{}
-
-	u.fetchById = func(id int64) (user *User, err error) {
-		ref := &Users{
-			client: client,
-		}
-		return ref.GetUserById(int64(id))
+func NewUsersHandler(client Client) *UsersHandler {
+	return &UsersHandler{
+		client: &client,
 	}
-
-	u.fetchByUsername = func(username string) (user *User, err error) {
-		ref := &Users{
-			client: client,
-		}
-		return ref.GetUserByUsername(username)
-	}
-
-	return u
 }
 
 // Gets a user by ID.
-func (ref *Users) GetUserById(userId int64) (*User, error) {
+func (ref *UsersHandler) GetUserById(userId int64) (*User, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
-	log.Println("sending request")
 	read, err := ref.client.http.SendRequest("https://users.roblox.com/v1/users/"+strconv.Itoa(int(userId)), map[string]interface{}{})
 	if err != nil {
 		return nil, err
@@ -53,7 +32,7 @@ func (ref *Users) GetUserById(userId int64) (*User, error) {
 
 	user := User{
 		IUser:  r,
-		client: &ref.client,
+		client: ref.client,
 	}
 
 	u := user.New(&user.IUser, *user.client)
@@ -62,10 +41,9 @@ func (ref *Users) GetUserById(userId int64) (*User, error) {
 }
 
 // Gets a user by username.
-func (ref *Users) GetUserByUsername(username string) (*User, error) {
+func (ref *UsersHandler) GetUserByUsername(username string) (*User, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(POST)
-	log.Println("sending request")
 	read, err := ref.client.http.SendRequest("https://users.roblox.com/v1/usernames/users", map[string]interface{}{
 		"usernames":          []string{username},
 		"excludeBannedUsers": false,
@@ -87,7 +65,7 @@ func (ref *Users) GetUserByUsername(username string) (*User, error) {
 }
 
 // Gets a user by ID and populates specified fields.
-func (ref *Users) GetUserAndPopulate(params UserParams) (User, error) {
+func (ref *UsersHandler) GetUserAndPopulate(params UserParams) (User, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
 	read, err := ref.client.http.SendRequest("https://users.roblox.com/v1/users/"+strconv.Itoa(params.id), map[string]interface{}{})
@@ -117,7 +95,7 @@ func (ref *Users) GetUserAndPopulate(params UserParams) (User, error) {
 }
 
 // Gets all the groups for a user by ID.
-func (ref *Users) GetGroupsForUser(userId int) ([]IGroup, error) {
+func (ref *UsersHandler) GetGroupsForUser(userId int) ([]IGroup, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
 	read, err := ref.client.http.SendRequest("https://groups.roblox.com/v1/users/"+strconv.Itoa(userId)+"/groups/roles", map[string]interface{}{})

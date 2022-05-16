@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -95,12 +94,10 @@ func (ref *NetworkRequest) AddCookie(cookie *http.Cookie) {
 }
 
 func (ref *NetworkRequest) SendRequest(url string, data map[string]interface{}) (string, error) {
-	log.Println(data)
 	if data == nil {
 		data = map[string]interface{}{}
 	}
 	marshal, jsonErr := json.Marshal(data)
-	log.Println(string(marshal))
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -122,9 +119,7 @@ func (ref *NetworkRequest) SendRequest(url string, data map[string]interface{}) 
 	if err != nil {
 		return "", err
 	}
-	log.Println("URL: " + url)
 	for _, cookie := range response.Cookies() {
-		log.Println("Adding Cookie: " + cookie.Name)
 		ref.AddCookie(cookie)
 	}
 	read, _ := ioutil.ReadAll(response.Body)

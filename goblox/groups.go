@@ -7,31 +7,20 @@ import (
 )
 
 type GroupsHandler struct {
-	fetchById func(id int64) (group *Group, err error)
-}
-
-type Groups struct {
-	client Client
+	client *Client
 }
 
 // Creates a new group handler with the given client.
 //
 // A group handler is used to fetch groups by ID.
-func (ref *GroupsHandler) New(client Client) *GroupsHandler {
-	g := &GroupsHandler{}
-
-	g.fetchById = func(id int64) (user *Group, err error) {
-		ref := &Groups{
-			client: client,
-		}
-		return ref.GetGroupById(int64(id))
+func NewGroupsHandler(client Client) *GroupsHandler {
+	return &GroupsHandler{
+		client: &client,
 	}
-
-	return g
 }
 
 // Gets a group by ID.
-func (ref *Groups) GetGroupById(groupId int64) (*Group, error) {
+func (ref *GroupsHandler) GetGroupById(groupId int64) (*Group, error) {
 	ref.client.http.SetContentType(APPJSON)
 	ref.client.http.SetRequestType(GET)
 	log.Println("sending request")

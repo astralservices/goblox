@@ -15,3 +15,5 @@ type IPagedResponse[T any] struct {
 type DatumedResponse[T any] struct {
 	Data []T `json:"data"`
 }
+
+type UsersHandlerStruct struct{}

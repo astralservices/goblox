@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 func Test_NewClient(t *testing.T) {
 	c := New()
 
-	if c.token == "" {
+	if c.Token == "" {
 		t.Logf("token is empty")
 	} else {
 		t.Logf("token is not empty")
@@ -30,14 +30,14 @@ func Test_NewClient(t *testing.T) {
 func Test_NewClientWithToken(t *testing.T) {
 	c := New(SetToken(os.Getenv("TOKEN")))
 
-	if c.token == "" {
+	if c.Token == "" {
 		t.Logf("Token is empty")
 	}
 }
 
 func Test_NewClientWithTokenLogin(t *testing.T) {
 	c := New(SetToken(os.Getenv("TOKEN")))
-	authed := c.login()
+	authed := c.Login()
 
 	if !authed {
 		t.Logf("login() returned false")
@@ -50,7 +50,7 @@ func Test_FetchUser(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	user, err := c.users.fetchByUsername("AstralServices")
+	user, err := c.Users.GetUserByUsername("AmusedCrepe")
 
 	if err != nil {
 		log.Fatal(err)
@@ -63,7 +63,7 @@ func Test_GetUsernameHistory(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	user, err := c.users.fetchByUsername("AmusedCrepe")
+	user, err := c.Users.GetUserByUsername("AmusedCrepe")
 
 	if err != nil {
 		log.Fatal(err)
@@ -82,7 +82,7 @@ func Test_GetUserGroups(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	user, err := c.users.fetchByUsername("AmusedCrepe")
+	user, err := c.Users.GetUserByUsername("AmusedCrepe")
 
 	if err != nil {
 		log.Fatal(err)
@@ -101,9 +101,10 @@ func Test_GetGroupRoles(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	group, err := c.groups.fetchById(13619939)
+	group, err := c.Groups.GetGroupById(13619939)
 
 	if err != nil {
+		log.Println(group)
 		log.Fatal(err)
 	}
 
@@ -120,7 +121,7 @@ func Test_GetGroupMembers(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	group, err := c.groups.fetchById(13619939)
+	group, err := c.Groups.GetGroupById(13619939)
 
 	if err != nil {
 		log.Fatal(err)
@@ -139,7 +140,7 @@ func Test_GetGroupIconURL(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	group, err := c.groups.fetchById(13619939)
+	group, err := c.Groups.GetGroupById(13619939)
 
 	if err != nil {
 		log.Fatal(err)
@@ -158,7 +159,7 @@ func Test_GetGroupAuditLog(t *testing.T) {
 	token := os.Getenv("TOKEN")
 	c := New(SetToken(token))
 
-	group, err := c.groups.fetchById(13619939)
+	group, err := c.Groups.GetGroupById(13619939)
 
 	if err != nil {
 		log.Fatal(err)
