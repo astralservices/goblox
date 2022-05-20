@@ -2,6 +2,7 @@ package goblox
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -12,8 +13,9 @@ type Client struct {
 
 	Users  *UsersHandler
 	Groups *GroupsHandler
+	Marketplace *MarketplaceHandler
 
-	Login func() bool
+	Login func(token string) bool
 
 	http NetworkRequest
 }
@@ -34,12 +36,12 @@ func New(opts ...Option) *Client {
 	c := Client{
 		http: NetworkRequest{},
 	}
-
-	c.http.New()
-
+	
 	for _, opt := range opts {
 		opt(c)
 	}
+
+	c.http.New()
 
 	if c.Token != "" {
 		c.http.AddCookie(&http.Cookie{
@@ -48,7 +50,13 @@ func New(opts ...Option) *Client {
 		})
 	}
 
-	c.Login = func() bool {
+	c.Login = func(token string) bool {
+		c.Token = token
+		c.http.AddCookie(&http.Cookie{
+			Name:  ".ROBLOSECURITY",
+			Value: c.Token,
+		})
+
 		return Login(c)
 	}
 
@@ -56,10 +64,17 @@ func New(opts ...Option) *Client {
 
 	c.Groups = NewGroupsHandler(c)
 
+	c.Marketplace = NewMarketplaceHandler(c)
+
 	return &c
 }
 
 func Login(client Client) bool {
+	if (client.Token == "") {
+		log.Fatalln("Token is empty")
+		return false
+	}
+	client.http.SetCSRFToken()
 	user, err := GetCurrentUser(client)
 
 	if err != nil {

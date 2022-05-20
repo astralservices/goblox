@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -93,6 +94,18 @@ func (ref *NetworkRequest) AddCookie(cookie *http.Cookie) {
 	ref.cookieArray = append(ref.cookieArray, cookie)
 }
 
+func (ref *NetworkRequest) SetCSRFToken() {
+	ref.SetRequestType(POST)
+	ref.SetContentType(APPJSON)
+	_, err := ref.SendRequest("https://auth.roblox.com/v2/login", map[string]interface{}{})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	ref.AddHeader("X-CSRF-TOKEN", []string{ref.response.Header.Get("X-CSRF-TOKEN")})
+}
+
 func (ref *NetworkRequest) SendRequest(url string, data map[string]interface{}) (string, error) {
 	if data == nil {
 		data = map[string]interface{}{}
@@ -101,7 +114,12 @@ func (ref *NetworkRequest) SendRequest(url string, data map[string]interface{}) 
 	if jsonErr != nil {
 		return "", jsonErr
 	}
-	client := http.Client{}
+	client := http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyFromEnvironment,
+		},
+	}
+
 	req, reqError := http.NewRequest(requestTypeToString[ref.requestType], url, bytes.NewBuffer(marshal))
 	if reqError != nil {
 		return "", reqError

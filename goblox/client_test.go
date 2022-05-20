@@ -36,8 +36,9 @@ func Test_NewClientWithToken(t *testing.T) {
 }
 
 func Test_NewClientWithTokenLogin(t *testing.T) {
-	c := New(SetToken(os.Getenv("TOKEN")))
-	authed := c.Login()
+	c := New()
+	
+	authed := c.Login(os.Getenv("TOKEN"))
 
 	if !authed {
 		t.Logf("login() returned false")
